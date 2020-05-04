@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls.apps.PollsConfig',
+    'plants.apps.PlantsConfig',
 ]
 
 MIDDLEWARE = [
@@ -52,9 +53,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-print("here is root url conf")
 ROOT_URLCONF = 'mysite.urls'
-print(ROOT_URLCONF)
+# LOGOUT_REDIRECT_URL = 'polls'
 
 TEMPLATES = [
     {
