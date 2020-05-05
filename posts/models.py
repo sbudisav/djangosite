@@ -17,7 +17,7 @@ class Post(models.Model):
     self.save()
 
   def __str__(self):
-    return self.title
+      return f'{self.title} - {self.author}'
 
 class Comment(models.Model):
   post = models.ForeignKey('posts.Post', on_delete=models.CASCADE, related_name='comments')
@@ -31,4 +31,4 @@ class Comment(models.Model):
       self.save()
 
   def __str__(self):
-      return self.text
+      return f'{self.author} - RE: {self.post.title} OP: {self.post.author} '

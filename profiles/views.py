@@ -7,9 +7,10 @@ from django.contrib.auth.models import User
 from .models import PublicProfile, UserPlant, PrivateProfile
 from posts.models import Post, Comment
 
-class HomeView(generic.DetailView):
+class HomeView(generic.ListView):
   model = PublicProfile
   template_name = 'profiles/home.html'
+  context_object_name = 'homepage'
 
 class FeedView(generic.ListView):
   model = Post
@@ -18,3 +19,6 @@ class FeedView(generic.ListView):
 class UserView(generic.DetailView):
   model = PublicProfile
   template_name = 'profiles/user'
+  context_object_name = 'profile'
+  
+

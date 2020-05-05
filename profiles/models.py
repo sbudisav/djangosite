@@ -18,11 +18,12 @@ class PublicProfile(models.Model):
           img.save(self.image.path)
 
 class UserPlant(models.Model):
-  user = models.ForeignKey('profiles.PublicProfile', on_delete=models.CASCADE)
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
   plant = models.ForeignKey('plants.Plant', on_delete=models.CASCADE)
+  nickname = models.CharField(max_length=25, default='')
 
   def __str__(self):
-    return f'{self.user.username}s {self.plant.name}'
+    return f'{self.user.username}s {self.plant.name} - {self.nickname}'
 
 class PrivateProfile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
