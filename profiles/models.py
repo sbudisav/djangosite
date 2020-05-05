@@ -18,7 +18,7 @@ class PublicProfile(models.Model):
           img.save(self.image.path)
 
 class UserPlant(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   plant = models.ForeignKey('plants.Plant', on_delete=models.CASCADE)
   nickname = models.CharField(max_length=25, default='')
 

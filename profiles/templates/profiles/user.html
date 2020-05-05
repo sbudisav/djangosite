@@ -1,1 +1,4 @@
-here is a specific users page
+Here are all my plants <br>
+{% for plant in plants %}
+  <h4> {{ plant.nickname }} the {{ plant.plant.name }}
+{% endfor %}
