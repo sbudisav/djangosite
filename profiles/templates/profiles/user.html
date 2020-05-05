@@ -1,4 +1,12 @@
-Here are all my plants <br>
-{% for plant in plants %}
-  <h4> {{ plant.nickname }} the {{ plant.plant.name }}
+<h3> Profile of user: {{ user.username }} </h3> <ul>
+{% for plant in user_plants %}
+  <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>
+{% endfor %}
+<br> 
+
+
+Here are the posts of that user <br>
+{% for post in posts %}
+  <h4> {{ post.title }} </h4>
+  {{ post.text }} <br>
 {% endfor %}

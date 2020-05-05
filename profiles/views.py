@@ -8,7 +8,7 @@ from .models import PublicProfile, UserPlant, PrivateProfile
 from posts.models import Post, Comment
 
 class HomeView(generic.ListView):
-  model = PublicProfile
+  model = PrivateProfile
   template_name = 'profiles/home.html'
   context_object_name = 'homepage'
 
@@ -23,12 +23,16 @@ class FeedView(generic.ListView):
     return Post.objects.filter(author=user).order_by('published_dt')
 
 class UserView(generic.ListView):
-  model = UserPlant
+  # Displays username, picture, their userplants, blog posts
+  model = User
   template_name = 'profiles/user.html'
-  context_object_name = 'plants'
 
-  def get_queryset(self):
-    plant_owner = get_object_or_404(User, username=self.kwargs.get('username'))
-    return UserPlant.objects.filter(user=plant_owner)
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user = get_object_or_404(User, username=self.kwargs.get('username'))
+    context['user'] = user
+    context['profile'] = PublicProfile.objects.filter(user=user)
+    context['user_plants'] = UserPlant.objects.filter(user=user)
+    context['posts'] = Post.objects.filter(author=user)
+    return context
   
-
