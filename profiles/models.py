@@ -11,9 +11,7 @@ class PublicProfile(models.Model):
 
   def save(self):
       super().save()
-
       img = Image.open(self.image.path)
-
       if img.height > 300 or img.width > 300:
           output_size = (300, 300)
           img.thumbnail(output_size)
@@ -22,10 +20,9 @@ class PublicProfile(models.Model):
 class UserPlant(models.Model):
   user = models.ForeignKey('profiles.PublicProfile', on_delete=models.CASCADE)
   plant = models.ForeignKey('plants.Plant', on_delete=models.CASCADE)
+
   def __str__(self):
     return f'{self.user.username}s {self.plant.name}'
-
-
 
 class PrivateProfile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)

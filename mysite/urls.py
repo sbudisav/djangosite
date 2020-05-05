@@ -23,5 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('polls/', include('polls.urls')),
-    # path('change-password/', auth_views.PasswordChangeView.as_view()),
+    path('profiles/', include('profiles.urls')),
+    path('plants/', include('plants.urls')), 
+    path('posts/', include('posts.urls')),
 ]
