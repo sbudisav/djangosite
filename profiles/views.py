@@ -4,11 +4,11 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.models import User
 
-from .models import PublicProfile, UserPlant, PrivateProfile
+from .models import UserProfile, UserPlant
 from posts.models import Post, Comment
 
 class HomeView(generic.ListView):
-  model = PrivateProfile
+  model = UserProfile
   template_name = 'profiles/home.html'
   context_object_name = 'homepage'
 
@@ -31,7 +31,7 @@ class UserView(generic.ListView):
     context = super().get_context_data(**kwargs)
     user = get_object_or_404(User, username=self.kwargs.get('username'))
     context['user'] = user
-    context['profile'] = PublicProfile.objects.filter(user=user)
+    context['profile'] = UserProfile.objects.filter(user=user)
     context['user_plants'] = UserPlant.objects.filter(user=user)
     context['posts'] = Post.objects.filter(author=user)
     return context

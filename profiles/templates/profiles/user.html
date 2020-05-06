@@ -1,12 +1,35 @@
-<h3> Profile of user: {{ user.username }} </h3> <ul>
-{% for plant in user_plants %}
-  <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>
-{% endfor %}
-<br> 
+{% load static %}
+
+<html>
+<head>
+  <title>MY SITE</title>
+</head>
+<body>
+
+  {% for item in profile %}
+    HERE: {{ item }} <br>
+  {% endfor %} <br>
+  MEDIA <br>
+  <div class="media">
+    profile image url: {{ profile.image.url }} <br>
+    profile image: {{ profile.image }} <br> 
+    img tag image.url: <img src="{{ profile.image.url }}"> <br>
+    img tag image: <img src="{{ profile.image }}"> <br>
+  </div>
 
 
-Here are the posts of that user <br>
-{% for post in posts %}
-  <h4> {{ post.title }} </h4>
-  {{ post.text }} <br>
-{% endfor %}
+  <h3> Profile of user: {{ user.username }} </h3> <ul>
+    My Plants: 
+  {% for plant in user_plants %}
+    <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>
+  {% endfor %}
+  <br> 
+
+
+   My Posts: <br>
+  {% for post in posts %}
+    <h4> {{ post.title }} </h4>
+    {{ post.text }} <br>
+  {% endfor %}
+</body> 
+</html>

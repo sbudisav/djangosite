@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import PublicProfile, PrivateProfile, UserPlant
+from .models import UserProfile, UserPlant
 
-admin.site.register(PublicProfile)
-admin.site.register(PrivateProfile)
+admin.site.register(UserProfile)
 admin.site.register(UserPlant)
