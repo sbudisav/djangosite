@@ -6,19 +6,18 @@
 </head>
 <body>
 
-  {% for item in profile %}
-    HERE: {{ item }} <br>
-  {% endfor %} <br>
+  ABOUT : {{ user_profile.user.about }} - {{ user.user_profile.about }} <br><br>
   MEDIA <br>
   <div class="media">
-    profile image url: {{ profile.image.url }} <br>
-    profile image: {{ profile.image }} <br> 
-    img tag image.url: <img src="{{ profile.image.url }}"> <br>
-    img tag image: <img src="{{ profile.image }}"> <br>
+    profile image url: {{ user_profile.image.url }} <br>
+    profile image: {{ user_profile.image }} <br> 
+    img tag image.url: <img src="{{ user_profile.image.url }}"> <br>
+    img tag image: <img src="{{ user_profile.image }}"> <br>
   </div>
 
 
   <h3> Profile of user: {{ user.username }} </h3> <ul>
+    <h4> About me: {{ user_profile.about }} </h4>
     My Plants: 
   {% for plant in user_plants %}
     <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>

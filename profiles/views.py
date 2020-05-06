@@ -31,7 +31,7 @@ class UserView(generic.ListView):
     context = super().get_context_data(**kwargs)
     user = get_object_or_404(User, username=self.kwargs.get('username'))
     context['user'] = user
-    context['profile'] = UserProfile.objects.filter(user=user)
+    # context['user_profile'] = UserProfile.objects.filter(user=user)
     context['user_plants'] = UserPlant.objects.filter(user=user)
     context['posts'] = Post.objects.filter(author=user)
     return context
