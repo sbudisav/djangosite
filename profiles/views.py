@@ -3,9 +3,13 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import UserProfile, UserPlant
 from posts.models import Post, Comment
+
+def register(request):
+
 
 class HomeView(generic.ListView):
   model = UserProfile
@@ -31,16 +35,15 @@ class UserView(generic.DetailView):
     context = super().get_context_data(**kwargs)
     user = get_object_or_404(User, username=self.kwargs.get('username'))
     # context['user_profile'] = user
-    context['user_profile'] = UserProfile.objects.filter(user=user)
+    context['user_profile'] = UserProfile.objects.get(user=user)
     context['user_plants'] = UserPlant.objects.filter(user=user)
     context['posts'] = Post.objects.filter(author=user)
     return context
 
 def profile(request, **kwargs):
-  # might need kwargs
   user = get_object_or_404(User, username=kwargs.get('username'))
   context = {
-  'user_profile':UserProfile.objects.filter(user=user),
+  'user_profile':UserProfile.objects.get(user=user),
   'user_plants':UserPlant.objects.filter(user=user),
   'posts':Post.objects.filter(author=user)
   }

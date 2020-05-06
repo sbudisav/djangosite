@@ -6,26 +6,11 @@
 </head>
 <body>
 
-1: {{ user.user_profile }} <br>
-2: {{ user_profile.user }} <br>
-3: {{ user_profile.about }} <br>
-4: {{ user.user_profile.about }} <br>
-5: {{ user_profile.user.about }} <br>
-6: {{ user.about }} <br>
-7: {{ user_profile.about }} <br>
+User: {{ user_profile.user }} <br>
+About: {{ user_profile.about }} <br>
 
-  {% for stuff in user_profile %}
-
-    {{ stuff.image.url }}
-    {{ stuff.about }} 
-  {% endfor %}
-
-  MEDIA <br>
   <div class="media">
-    profile image url: {{ user_profile.image.url }} <br>
-    profile image: {{ user_profile.image }} <br> 
-    img tag image.url: <img src="{{ user_profile.image.url }}"> <br>
-    img tag image: <img src="{{ user_profile.image }}"> <br>
+    <img src="{{ user_profile.image.url }}"> <br>
   </div><br><br>
 
     My Plants: 
