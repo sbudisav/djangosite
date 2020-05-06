@@ -4,7 +4,7 @@ from PIL import Image
 
 class UserProfile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
-  image = models.ImageField(default='default.jpg', upload_to='profile_pic')
+  image = models.ImageField(default='default.jpg', upload_to='profile_pic', blank=True)
   about = models.CharField(max_length=600, default='', blank=True)
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)

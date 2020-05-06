@@ -22,17 +22,26 @@ class FeedView(generic.ListView):
     user = get_object_or_404(User, username=self.kwargs.get('username'))
     return Post.objects.filter(author=user).order_by('published_dt')
 
-class UserView(generic.ListView):
+class UserView(generic.DetailView):
   # Displays username, picture, their userplants, blog posts
-  model = User
+  model = UserProfile
   template_name = 'profiles/user.html'
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     user = get_object_or_404(User, username=self.kwargs.get('username'))
-    context['user'] = user
-    # context['user_profile'] = UserProfile.objects.filter(user=user)
+    # context['user_profile'] = user
+    context['user_profile'] = UserProfile.objects.filter(user=user)
     context['user_plants'] = UserPlant.objects.filter(user=user)
     context['posts'] = Post.objects.filter(author=user)
     return context
-  
+
+def profile(request, **kwargs):
+  # might need kwargs
+  user = get_object_or_404(User, username=kwargs.get('username'))
+  context = {
+  'user_profile':UserProfile.objects.filter(user=user),
+  'user_plants':UserPlant.objects.filter(user=user),
+  'posts':Post.objects.filter(author=user)
+  }
+  return render(request, 'profiles/user.html', context)
