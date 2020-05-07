@@ -22,12 +22,13 @@ def register(request):
       form = UserRegisterForm()
   return render(request, 'profiles/register.html', {'form': form})
 
-@login_required
+# @login_required
 def homepage(request):
   model = UserProfile
   template_name = 'profiles/home.html'
-  context_object_name = 'homepage'
-
+  # context_object_name = 'homepage'
+  # context = 'homepage'
+  return render(request, 'profiles/home.html', {'homepage':homepage})
   def get_queryset(self):
     user = get_object_or_404(User, username=self.kwargs.get('username'))
     return Post.objects.filter(author=user).order_by('published_dt')

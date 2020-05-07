@@ -1,1 +1,9 @@
-Here is plants index
+{% extends base.html %}
+Splash Page <br>
+
+{% for plant in plants %}
+- {{ plant.name }} <br>
+{% endfor %}
+
+<a href="{% url 'polls:index' %}">Polls</a><br>
+<a href="{% url 'profiles:home' %}">Profile Home</a>

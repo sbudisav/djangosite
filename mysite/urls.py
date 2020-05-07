@@ -23,9 +23,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('polls/', include('polls.urls')),
-    path('profiles/', include('profiles.urls')),
-    path('plants/', include('plants.urls')), 
+    path('polls/', include('polls.urls'), name="polls"),
+    path('profiles/', include('profiles.urls'), name="profiles"),
+    path('plants/', include('plants.urls'), name="plants"), 
     path('posts/', include('posts.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

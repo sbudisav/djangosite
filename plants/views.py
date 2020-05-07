@@ -10,3 +10,4 @@ from .models import Plant
 class IndexView(generic.ListView):
   model = Plant
   template_name = 'plants/index.html'
+  context_object_name = 'plants'
