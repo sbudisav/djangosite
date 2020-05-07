@@ -1,21 +1,25 @@
-h2, h3, h4, h5, h6 {
-  color: #5de04c;
+/*h2, h3, h4, h5, h6 {
+  color: green;
 }
 
 h1 {
-  color: #f40c0c;
+  color: green;
 }
 
 header {
-  color: #5de04c;
+  color: green;
 }
 
 body {
-  background: #fafafa;
-  color: #333333;
+  background: green;
+  color: green;
   margin-top: 5rem;
 }
 
+li a {
+    color: green;
+}*/
+/*
 .site-header .navbar-nav .nav-link {
   color: #cbd5db;
 }
@@ -26,4 +30,4 @@ body {
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
-}
+}*/

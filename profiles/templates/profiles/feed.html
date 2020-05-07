@@ -1,5 +1,10 @@
-User posts <br>
-{% for post in posts %}
-  <h3> {{ post.title }} </h3>
-  {{ post.text }} <br>
-{% endfor %}
+{% extends "base.html" %}
+{% block content %}
+
+  User posts <br>
+  {% for post in posts %}
+    <h3> {{ post.title }} </h3>
+    {{ post.text }} <br>
+  {% endfor %}
+  
+{% endblock %}

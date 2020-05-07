@@ -1,5 +1,5 @@
 li a {
-    color: green;
+    color: blue;
 }
 
 body {
@@ -8,4 +8,8 @@ body {
 
 .poll_content {
   background-color:white;
+}
+
+h1 {
+  color: blue;
 }

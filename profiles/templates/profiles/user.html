@@ -1,13 +1,8 @@
-{% load static %}
+{% extends "base.html" %}
+{% block content %}
 
-<html>
-<head>
-  <title>MY SITE</title>
-</head>
-<body>
-
-User: {{ user_profile.user }} <br>
-About: {{ user_profile.about }} <br>
+  User: {{ user_profile.user }} <br>
+  About: {{ user_profile.about }} <br>
 
   <div class="media">
     <img src="{{ user_profile.image.url }}"> <br>
@@ -25,5 +20,5 @@ About: {{ user_profile.about }} <br>
     <h4> {{ post.title }} </h4>
     {{ post.text }} <br>
   {% endfor %}
-</body> 
-</html>
+
+{% endblock %}
