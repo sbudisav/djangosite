@@ -2,7 +2,10 @@
 {% block content %}
 
   <h1> Plant Home (main homepage) </h1> <br>
-
+  {% if user.is_authenticated %}
+    You are logged in as {{ user }}
+  {% endif %}
+  <br> 
   {% for plant in plants %}
   - {{ plant.name }} <br>
   {% endfor %}
