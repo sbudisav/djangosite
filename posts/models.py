@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
+from PIL import Image
 
 # Create your models here.
 
@@ -9,12 +10,21 @@ class Post(models.Model):
   author = models.ForeignKey(User, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
   text = models.TextField()
+  image = models.ImageField(upload_to='post_picture', blank=True)
   created_dt = models.DateTimeField(default=timezone.now)
   published_dt = models.DateTimeField(blank=True, null=True)
 
   def publish(self):
     self.published_dt = timezone.now()
     self.save()
+
+  def save(self):
+      super().save()
+      img = Image.open(self.image.path)
+      if img.height > 300 or img.width > 300:
+          output_size = (300, 300)
+          img.thumbnail(output_size)
+          img.save(self.image.path)    
 
   def __str__(self):
       return f'{self.title} - {self.author}'
