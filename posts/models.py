@@ -10,7 +10,7 @@ class Post(models.Model):
   author = models.ForeignKey(User, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
   text = models.TextField()
-  image = models.ImageField(upload_to='post_picture', blank=True)
+  post_image = models.ImageField(upload_to='post_picture', blank=True)
   created_dt = models.DateTimeField(default=timezone.now)
   published_dt = models.DateTimeField(blank=True, null=True)
 
@@ -19,12 +19,13 @@ class Post(models.Model):
     self.save()
 
   def save(self):
-      super().save()
-      img = Image.open(self.image.path)
+    super().save()
+    if self.post_image:
+      img = Image.open(self.post_image.path)
       if img.height > 300 or img.width > 300:
           output_size = (300, 300)
           img.thumbnail(output_size)
-          img.save(self.image.path)    
+          img.save(self.post_image.path)    
 
   def __str__(self):
       return f'{self.title} - {self.author}'
@@ -37,8 +38,8 @@ class Comment(models.Model):
   approved_comment = models.BooleanField(default=False)
 
   def approve(self):
-      self.approved_comment = True
-      self.save()
+    self.approved_comment = True
+    self.save()
 
   def __str__(self):
-      return f'{self.author} - RE: {self.post.title} OP: {self.post.author} '
+    return f'{self.author} - RE: {self.post.title} OP: {self.post.author} '

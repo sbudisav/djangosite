@@ -22,7 +22,7 @@ def register(request):
       form = UserRegisterForm()
   return render(request, 'profiles/register.html', {'form': form})
 
-# @login_required
+@login_required
 def homepage(request):
   model = UserProfile
   # template_name = 'profiles/home.html'
@@ -34,28 +34,23 @@ def homepage(request):
     user = get_object_or_404(User, username=self.kwargs.get('username'))
     return Post.objects.filter(author=user).order_by('published_dt')
 
-class FeedView(generic.ListView):
-  model = Post
+@login_required
+def feed(request):
+  user = request.user
+  comments = Post.objects.get(user__username=user)
   template_name = 'profiles/feed.html'
   context_object_name = 'posts'
   paginate_by = 10
-  # Get friends, grab all posts, sort by most recent
+  return render(request, 'profiles/feed.html', {'posts':posts})
+
+  # How to define user
+  # request = everything included in request when sent
+  # This includes the current logged in user/session
 
 
-class UserView(generic.DetailView):
-  # Displays username, picture, their userplants, blog posts
-  model = UserProfile
-  template_name = 'profiles/user.html'
-
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    user = get_object_or_404(User, username=self.kwargs.get('username'))
-    # context['user_profile'] = user
-    context['user_profile'] = UserProfile.objects.get(user=user)
-    context['user_plants'] = UserPlant.objects.filter(user=user)
-    context['posts'] = Post.objects.filter(author=user)
-    return context
-
+# Had generic class based view but deleted it, as profile does
+# Same thing but with more flexabilty. Should be in any git 
+# Commit older than 5/7
 def profile(request, **kwargs):
   user = get_object_or_404(User, username=kwargs.get('username'))
   context = {
@@ -64,3 +59,7 @@ def profile(request, **kwargs):
     'posts':Post.objects.filter(author=user)
     }
   return render(request, 'profiles/user.html', context)
+
+def update_profile(request):
+  model = UserProfile
+

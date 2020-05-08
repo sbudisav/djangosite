@@ -13,6 +13,8 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UserUpdateForm(forms.ModelForm):
+    # Keeping seperate as it might be better for future
+    # Might want user update it's own "settings" page
     email = forms.EmailField()
 
     class Meta:
@@ -23,4 +25,4 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['image', 'about', 'requires_comment_validation', 'zipcode']
+        fields = ['user_image', 'about', 'requires_comment_validation', 'zipcode']
