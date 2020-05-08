@@ -2,9 +2,34 @@
 {% block content %}
 
   User posts <br>
+  <!-- Pass a comment count for display View Comments (4) -->
   {% for post in posts %}
     <h3> {{ post.title }} </h3>
     {{ post.text }} <br>
+
+  <p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+      View Comments
+    </a>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      Button with data-target
+    </button>
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+    {% for comment in post.comments.all %}
+      <div class="comment">
+        <div class="date">{{ comment.created_date }}</div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+    </div>
+    {% empty %}
+    <p>No comments here yet :(</p>
+    {% endfor %}
+    </div>
+  </div>
+
+
   {% endfor %}
   
 {% endblock %}

@@ -14,11 +14,31 @@
   {% endfor %}
   <br> 
 
-
+  <hr>
    My Posts: <br>
   {% for post in posts %}
     <h4> {{ post.title }} </h4>
     {{ post.text }} <br>
+
+    <p>
+      <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        View Comments ({{post.comments.all.count}})
+      </a>
+    </p>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+      {% for comment in post.comments.all %}
+        <div class="comment">
+          <div class="date">{{ comment.created_date }}</div>
+          <strong>{{ comment.author }}</strong>
+          <p>{{ comment.text|linebreaks }}</p>
+      </div>
+      {% empty %}
+      <p>No comments here yet :(</p>
+      {% endfor %}
+      </div>
+    </div>
+
   {% endfor %}
 
 {% endblock %}
