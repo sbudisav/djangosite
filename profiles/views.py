@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import generic
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from .models import UserProfile, UserPlant
+from .models import UserProfile, UserPlant, Friend
 from posts.models import Post, Comment
 
 def register(request):
@@ -37,11 +37,22 @@ def homepage(request):
 @login_required
 def feed(request):
   user = request.user
-  comments = Post.objects.get(user__username=user)
+  friend_list = Friend.objects.filter(user=user)
+  post_feed = []
+  # Should building post feed be a function? 
+  for friend in friend_list:
+    friend_posts = Post.objects(filter(author=friend))
+    for post in friend_posts:
+      post_feed.append(post)
+
+  # still need to filter by date
+  # Posts might automatically pull in comments we will have to see
+  # comments = Post.objects.get(user__username=user)
   template_name = 'profiles/feed.html'
-  context_object_name = 'posts'
   paginate_by = 10
-  return render(request, 'profiles/feed.html', {'posts':posts})
+  return render(request, 'profiles/feed.html', {'posts':post_feed})
+
+
 
   # How to define user
   # request = everything included in request when sent

@@ -24,6 +24,9 @@ class Friend(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
 
+  def __str__(self):
+    return f'{self.user.username} follows {self.friend.username}'
+
 class UserPlant(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   plant = models.ForeignKey('plants.Plant', on_delete=models.CASCADE)
