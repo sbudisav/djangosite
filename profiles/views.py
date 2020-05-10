@@ -36,32 +36,34 @@ def homepage(request):
 
 @login_required
 def feed(request):
-  user = request.user
-  friend_list = Friend.objects.filter(user=user)
+  current_user = request.user
+  friend_list = Friend.objects.filter(user=current_user)
+  print("here is the list: ")
+  print(friend_list)
+  # friend object must be a user instance
+  # I must be calling filter wrong
+  # It's causing me to think I'm getting a user object
   post_feed = []
   # Should building post feed be a function? 
   for friend in friend_list:
-    friend_posts = Post.objects(filter(author=friend))
+    friend_posts = Post.objects.filter(author=friend)
     for post in friend_posts:
       post_feed.append(post)
-
   # still need to filter by date
   # Posts might automatically pull in comments we will have to see
   # comments = Post.objects.get(user__username=user)
   template_name = 'profiles/feed.html'
   paginate_by = 10
+
+    # def get_queryset(self):
+    #     current_user_friends = self.request.user.friends.values('id')
+    #     sent_request = list(Friend.objects.filter(user=self.request.user).values_list('friend_id', flat=True))
+    #     users = User.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(id=self.request.user.id)
+    #     return users
+
+
   return render(request, 'profiles/feed.html', {'posts':post_feed})
 
-
-
-  # How to define user
-  # request = everything included in request when sent
-  # This includes the current logged in user/session
-
-
-# Had generic class based view but deleted it, as profile does
-# Same thing but with more flexabilty. Should be in any git 
-# Commit older than 5/7
 def profile(request, **kwargs):
   user = get_object_or_404(User, username=kwargs.get('username'))
   context = {

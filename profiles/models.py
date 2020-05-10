@@ -21,7 +21,7 @@ class UserProfile(models.Model):
         img.save(self.user_image.path)
 
 class Friend(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  users = models.ManytoManyField(User, on_delete=models.CASCADE)
   friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
 
   def __str__(self):
