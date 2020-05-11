@@ -4,7 +4,7 @@ from PIL import Image
 
 class UserProfile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
-  user_image = models.ImageField(default='default_profile.jpg', upload_to='profile_pic', blank=True)
+  profile_image = models.ImageField(default='default_profile.jpg', upload_to='profile_pic', blank=True)
   about = models.CharField(max_length=600, default='', blank=True)
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
@@ -14,11 +14,12 @@ class UserProfile(models.Model):
 
   def save(self):
     super().save()
-    img = Image.open(self.user_image.path)
-    if img.height > 300 or img.width > 300:
-        output_size = (300, 300)
-        img.thumbnail(output_size)
-        img.save(self.user_image.path)
+    if self.profile_image:
+      img = Image.open(self.user_image.path)
+      if img.height > 300 or img.width > 300:
+          output_size = (300, 300)
+          img.thumbnail(output_size)
+          img.save(self.user_image.path)
 
 class Friend(models.Model):
   users = models.ManytoManyField(User, on_delete=models.CASCADE)
