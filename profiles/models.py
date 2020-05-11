@@ -9,22 +9,19 @@ class UserProfile(models.Model):
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
 
-  following = models.ManyToManyField('self', through='FollowedUsers', symmetrical=False, related_name='is_following')
+  following = models.ManyToManyField('self', through='FollowedUser', symmetrical=False, related_name='is_following')
 
   def start_following(self, followed_user):
-    FollowedUsers.objects.get_or_create(
+    FollowedUser.objects.get_or_create(
         user=self,
-        followed_user=followed_user,
-        status=status)
+        followed_user=followed_user)
     return
 
   def stop_following(self, followed_user):
-    FollowedUsers.objects.filter(
+    FollowedUser.objects.filter(
         user=self,
-        friend=followed_user).delete()
+        followed_user=followed_user).delete()
     return
-
-  def follower_count(self);
 
   def __str__(self):
     return f'{self.user.username} Profile'
@@ -38,12 +35,12 @@ class UserProfile(models.Model):
           img.thumbnail(output_size)
           img.save(self.user_image.path)
 
-class FollowedUsers(models.Model):
+class FollowedUser(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
-  followed_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
+  followed_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followed_user')
 
   def __str__(self):
-    return f'{self.user.username} follows {self.friend.username}'
+    return f'{self.user.username} follows {self.followed_user.username}'
 
 class UserPlant(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)

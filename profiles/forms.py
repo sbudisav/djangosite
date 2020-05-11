@@ -25,4 +25,4 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user_image', 'about', 'requires_comment_validation', 'zipcode']
+        fields = ['profile_image', 'about', 'requires_comment_validation', 'zipcode']

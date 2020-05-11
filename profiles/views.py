@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import generic
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from .models import UserProfile, UserPlant, Friend
+from .models import UserProfile, UserPlant, FollowedUser
 from posts.models import Post, Comment
 
 def register(request):
@@ -37,17 +37,14 @@ def homepage(request):
 @login_required
 def feed(request):
   current_user = request.user
-  friend_list = Friend.objects.filter(user=current_user)
+  followed_user_list = FollowedUser.objects.filter(user=current_user)
   print("here is the list: ")
-  print(friend_list)
-  # friend object must be a user instance
-  # I must be calling filter wrong
-  # It's causing me to think I'm getting a user object
+  print(followed_user_list)
   post_feed = []
   # Should building post feed be a function? 
-  for friend in friend_list:
-    friend_posts = Post.objects.filter(author=friend)
-    for post in friend_posts:
+  for followed_user in followed_user_list:
+    followed_posts = Post.objects.filter(author=followed_user)
+    for post in followed_posts:
       post_feed.append(post)
   # still need to filter by date
   # Posts might automatically pull in comments we will have to see
