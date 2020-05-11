@@ -75,4 +75,3 @@ def profile(request, **kwargs):
 
 def update_profile(request):
   model = UserProfile
-

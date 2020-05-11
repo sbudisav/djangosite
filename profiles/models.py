@@ -3,14 +3,31 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 class UserProfile(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
   profile_image = models.ImageField(default='default_profile.jpg', upload_to='profile_pic', blank=True)
   about = models.CharField(max_length=600, default='', blank=True)
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
 
+  following = models.ManyToManyField('self', through='FollowedUsers', symmetrical=False, related_name='is_following')
+
+  def start_following(self, followed_user):
+    FollowedUsers.objects.get_or_create(
+        user=self,
+        followed_user=followed_user,
+        status=status)
+    return
+
+  def stop_following(self, followed_user):
+    FollowedUsers.objects.filter(
+        user=self,
+        friend=followed_user).delete()
+    return
+
+  def follower_count(self);
+
   def __str__(self):
-      return f'{self.user.username} Profile'
+    return f'{self.user.username} Profile'
 
   def save(self):
     super().save()
@@ -21,9 +38,9 @@ class UserProfile(models.Model):
           img.thumbnail(output_size)
           img.save(self.user_image.path)
 
-class Friend(models.Model):
-  users = models.ManytoManyField(User, on_delete=models.CASCADE)
-  friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
+class FollowedUsers(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  followed_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
 
   def __str__(self):
     return f'{self.user.username} follows {self.friend.username}'
