@@ -2,14 +2,53 @@
 {% block content %}
 
   <div class="page-header">
-    <h1><a href="/">Profile Home</a></h1>
+    <h1>Profile Home</h1>
     User: {{ user }}<br>
 
     {% if user.is_authenticated %}
       You are logged in as {{ user }}
     {% endif %}
+    <br> 
+    <div class="container">
+      <div class="col-sm">
+        About: {{ user_profile.about }}
+      </div>
+      <div class="col-sm">
+          <div class="media">
+            <img src="{{ user_profile.user_image.url }}"> <br>
+          </div><br
+      </div>
+  </div><hr>
+
+  <div>
+    <h2>Your Post Feed</h2> <br>
+    <!-- Pass a comment count for display View Comments (4) -->
+    {% for post in posts %}
+      <h3> {{ post.title }} </h3>
+      By: {{ post.author }}
+      {{ post.text }} <br>
+
+    <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">View Comments
+    </a></p>
+
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+      {% for post in feed.posts.all %}
+        <div class="comment">
+          <div class="date">{{ post.comment.created_date }}</div>
+          <strong>{{ comment.author }}</strong>
+          <p>{{ comment.text|linebreaks }}</p>
+      </div>
+      {% empty %}
+      <p>No comments here yet :(</p>
+      {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
   </div>
 
+  <hr>
+
 <a href="{% url 'polls:index' %}">Polls</a><br>
-<a href="{% url 'plants:home' %}">Profile Home</a>
+<a href="{% url 'plants:home' %}">Plants Home</a>
 {% endblock %}

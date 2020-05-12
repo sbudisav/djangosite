@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 
-  User posts <br>
+  <h2>User posts</h2> <br>
+
   <!-- Pass a comment count for display View Comments (4) -->
   {% for post in posts %}
     <h3> {{ post.title }} </h3>
+    By: {{ post.author }}
     {{ post.text }} <br>
 
   <p>

@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-from django.views import generic
+from django.views.generic import TemplateView
+from django.utils.decorators import method_decorator
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import UserProfile, UserPlant, FollowedUser
@@ -22,44 +23,27 @@ def register(request):
       form = UserRegisterForm()
   return render(request, 'profiles/register.html', {'form': form})
 
-@login_required
-def homepage(request):
-  model = UserProfile
-  # template_name = 'profiles/home.html'
-  # context_object_name = 'homepage'
-  # context = 'homepage'
-  return render(request, 'profiles/home.html', {'homepage':homepage})
-
+class HomePageView(TemplateView):
+  @method_decorator(login_required)
+  
   def get_queryset(self):
-    user = get_object_or_404(User, username=self.kwargs.get('username'))
+    user = request.user
     return Post.objects.filter(author=user).order_by('published_dt')
 
-@login_required
-def feed(request):
-  current_user = request.user
-  followed_user_list = FollowedUser.objects.filter(user=current_user)
-  print("here is the list: ")
-  print(followed_user_list)
-  post_feed = []
-  # Should building post feed be a function? 
-  for followed_user in followed_user_list:
-    followed_posts = Post.objects.filter(author=followed_user)
-    for post in followed_posts:
-      post_feed.append(post)
-  # still need to filter by date
-  # Posts might automatically pull in comments we will have to see
-  # comments = Post.objects.get(user__username=user)
-  template_name = 'profiles/feed.html'
-  paginate_by = 10
+  def get_feed(self):
+    user = request.user
+    for followed_user in followed_user_list:
+      followed_posts = Post.objects.filter(author=followed_user)
+      for post in followed_posts:
+        post_feed.append(post)
+    paginate_by = 10
 
-    # def get_queryset(self):
-    #     current_user_friends = self.request.user.friends.values('id')
-    #     sent_request = list(Friend.objects.filter(user=self.request.user).values_list('friend_id', flat=True))
-    #     users = User.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(id=self.request.user.id)
-    #     return users
+  def get_queryset(self):
+    current_user_friends = self.request.user.friends.values('id')
+    sent_request = list(Friend.objects.filter(user=self.request.user).values_list('friend_id', flat=True))
+    users = User.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(id=self.request.user.id)
+    return users
 
-
-  return render(request, 'profiles/feed.html', {'posts':post_feed})
 
 def profile(request, **kwargs):
   user = get_object_or_404(User, username=kwargs.get('username'))
