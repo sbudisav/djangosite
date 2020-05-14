@@ -29,6 +29,7 @@ class HomePageView(TemplateView):
   def get_queryset(self):
     user = request.user
     return Post.objects.filter(author=user).order_by('published_dt')
+    # Need to configure queryset properly
 
   def get_feed(self):
     return UserProfile.user_feed
