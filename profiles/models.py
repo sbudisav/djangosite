@@ -23,6 +23,12 @@ class UserProfile(models.Model):
         followed_user=followed_user).delete()
     return
 
+  def user_feed(self):
+    for followed_user in followed_user_list:
+      followed_posts = Post.objects.filter(author=followed_user)
+      for post in followed_posts:
+        post_feed.append(post)
+
   def __str__(self):
     return f'{self.user.username} Profile'
 

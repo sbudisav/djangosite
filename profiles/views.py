@@ -31,11 +31,7 @@ class HomePageView(TemplateView):
     return Post.objects.filter(author=user).order_by('published_dt')
 
   def get_feed(self):
-    user = request.user
-    for followed_user in followed_user_list:
-      followed_posts = Post.objects.filter(author=followed_user)
-      for post in followed_posts:
-        post_feed.append(post)
+    return UserProfile.user_feed
     paginate_by = 10
 
   def get_queryset(self):
