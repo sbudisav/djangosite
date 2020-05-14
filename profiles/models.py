@@ -10,6 +10,10 @@ class UserProfile(models.Model):
   requires_comment_validation = models.BooleanField(default=False)
 
   following = models.ManyToManyField('self', through='FollowedUser', symmetrical=False, related_name='is_following')
+  # Is this data redundant? Can we build the feed via the Followed User? 
+  # Potentially violating 1NF as we are storing a list
+  # Could this be a built in django function
+  # that makes a dynamic list without storing in the User Profile table? 
 
   def start_following(self, followed_user):
     FollowedUser.objects.get_or_create(
@@ -24,7 +28,7 @@ class UserProfile(models.Model):
     return
 
   def user_feed(self):
-    for followed_user in followed_user_list:
+    for followed_user in self.following:
       followed_posts = Post.objects.filter(author=followed_user)
       for post in followed_posts:
         post_feed.append(post)
@@ -44,6 +48,7 @@ class UserProfile(models.Model):
 class FollowedUser(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   followed_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followed_user')
+  # primary key is a composite key
 
   def __str__(self):
     return f'{self.user.username} follows {self.followed_user.username}'
