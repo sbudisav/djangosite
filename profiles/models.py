@@ -5,18 +5,13 @@ from django.dispatch import receiver
 from PIL import Image
 
 class UserProfile(models.Model):
-  user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
+  user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, primary_key=True)
   profile_image = models.ImageField(default='default_profile.jpg', upload_to='profile_pic', blank=True)
   about = models.CharField(max_length=600, default='', blank=True)
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
-  # slug = models.SlugField(unique=True)
 
   following = models.ManyToManyField('self', through='FollowedUser', symmetrical=False, related_name='is_following')
-  # Is this data redundant? Can we build the feed via the Followed User? 
-  # Potentially violating 1NF as we are storing a list
-  # Could this be a built in django function
-  # that makes a dynamic list without storing in the User Profile table? 
 
   def start_following(self, followed_user):
     FollowedUser.objects.get_or_create(
@@ -41,22 +36,21 @@ class UserProfile(models.Model):
     return f'{self.user.username} Profile'
 
   def save(self):
-    self.slug = slugify(self.user.username)
     super().save()
     if self.profile_image:
-      img = Image.open(self.user_image.path)
+      img = Image.open(self.profile_image.path)
       if img.height > 300 or img.width > 300:
           output_size = (300, 300)
           img.thumbnail(output_size)
-          img.save(self.user_image.path)
+          img.save(self.profile_image.path)
 
 class FollowedUser(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  followed_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followed_user')
+  user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+  followed_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='followed_user')
   # primary key is a composite key
 
   def __str__(self):
-    return f'{self.user.username} follows {self.followed_user.username}'
+    return f'{self.user.user.username} follows {self.followed_user.user.username}'
 
 class UserPlant(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)

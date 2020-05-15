@@ -1,8 +1,8 @@
-/*h2, h3, h4, h5, h6 {
+h2, h3, h4, h5, h6 {
   color: green;
 }
 
-h1 {
+h1 h2 h3 h4 h5 {
   color: green;
 }
 
@@ -18,8 +18,8 @@ body {
 
 li a {
     color: green;
-}*/
-/*
+}
+
 .site-header .navbar-nav .nav-link {
   color: #cbd5db;
 }
@@ -30,4 +30,10 @@ li a {
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
-}*/
+}
+
+.left-border {
+  border-left: 1px;
+  color: red;
+  background: green;
+}

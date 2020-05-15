@@ -2,7 +2,7 @@
 {% block content %}
 
   <div class="page-header">
-    <h1>Profile Home</h1><br>
+    <h1>Profile Home</h1>
 
     {% if user.is_authenticated %}
       You are logged in as {{ user }}
@@ -10,30 +10,30 @@
     <hr> 
   </div>
 
-  <div class="container">
-    <div class="row justify-content">
-      <div class="col-md-auto">
-        <h4> About: {{ user_profile.about }} </h4>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <h4> About: </h4> {{ user_profile.about }} 
       </div>
-      <div class="col-md-auto">
+      <div class="col-md-6">
           <div class="media">
             <img src="{{ user_profile.profile_image.url }}"> <br>
-          </div><br>
+          </div>
       </div>
     </div>
     <hr>
 
     <!-- Users Posts -->
-    <div class="row justify-content">
-      <div class ="col-md-auto">
+    <div class="row">
+      <div class="col-md-6">
         <h4> My Posts: </h4><br>
         {% for post in posts %}
           <h4> {{ post.title }} </h4>
           {{ post.text }} <br>
+        {% endfor %}
       </div>
-
-      <!-- Users Plants -->
-      <div class="col-md-auto">
+    <!-- Users Plants -->
+      <div class="col-md-6">
         <h4> My Plants: </h4><br>
         {% for plant in user_plants %}
           <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>
@@ -43,32 +43,38 @@
     <hr>
 
   <!-- Post Feed -->
-    <div class="row justify-content">
-      <h2>Your Post Feed</h2> <br>
-      <!-- Pass a comment count for display View Comments (4) -->
-      {% for post in posts %}
-        <h3> {{ post.title }} </h3>
-        By: {{ post.author }}
-        {{ post.text }} <br>
-      {% endfor %}
+    <div class="row">
+      <div class="col-md-2">
+        <h4>Following:</h4>
+        
+      </div>
 
-      <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">View Comments
-      </a></p>
-
-      <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-        {% for post in feed.posts.all %}
-          <div class="comment">
-            <div class="date">{{ post.comment.created_date }}</div>
-            <strong>{{ comment.author }}</strong>
-            <p>{{ comment.text|linebreaks }}</p>
-        </div>
-        {% empty %}
-        <p>No comments here yet :(</p>
+      <div class="col-md-10">
+        <h4>Your Post Feed</h4> <br>
+        <!-- Pass a comment count for display View Comments (4) -->
+        {% for post in posts %}
+          <h4> {{ post.title }} </h4>
+          By: {{ post.author }}
+          {{ post.text }} <br>
         {% endfor %}
+
+        <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">View Comments
+        </a></p>
+
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+          {% for post in feed.posts.all %}
+            <div class="comment">
+              <div class="date">{{ post.comment.created_date }}</div>
+              <strong>{{ comment.author }}</strong>
+              <p>{{ comment.text|linebreaks }}</p>
+          </div>
+          {% empty %}
+          <p>No comments here yet :(</p>
+          {% endfor %}
+          </div>
         </div>
       </div>
-      {% endfor %}
     </div>
   </div>
   <hr>

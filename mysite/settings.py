@@ -129,7 +129,7 @@ LOGIN_REDIRECT_URL = 'profiles:redirect_home'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    '/mysite/static/'
+    '/mysite/static/', 
 ]
 # print(STATICFILES_DIRS)
 
