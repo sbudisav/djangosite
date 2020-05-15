@@ -29,17 +29,6 @@ def register(request):
 def redirect_to_homepage(request):
   user = request.user
   return HttpResponseRedirect(reverse('profiles:home', args=(user.id,)))
-  # return redirect('profiles:home', pk=user.id)
-
-def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            # log the user in
-            return redirect('articles:list')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'accounts/login.html', { 'form': form })
 
 # @login_required()
 class HomePageView(generic.DetailView):
@@ -71,16 +60,3 @@ def profile(request, **kwargs):
     'posts':Post.objects.filter(author=user)
     }
   return render(request, 'profiles/user.html', context)
-
-def login(request):
-  username = request.POST.get('username')
-  password = request.POST.get('password')
-  user = authenticate(request, username=username, password=password)
-  if user is not None:
-      login(request, user)
-      # Redirect to a success page.
-      return redirect('profiles:home', user.id)
-  else:
-      # Return an 'invalid login' error message.
-      return redirect('plants:home')
-  return render(request, 'profiles/login.html')
