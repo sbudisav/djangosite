@@ -1,12 +1,14 @@
 from django.contrib import messages
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from django.utils.decorators import method_decorator
+from django.http import HttpResponseRedirect
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import UserProfile, UserPlant, FollowedUser
@@ -23,6 +25,21 @@ def register(request):
   else:
       form = UserRegisterForm()
   return render(request, 'profiles/register.html', {'form': form})
+
+def redirect_to_homepage(request):
+  user = request.user
+  return HttpResponseRedirect(reverse('profiles:home', args=(user.id,)))
+  # return redirect('profiles:home', pk=user.id)
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            # log the user in
+            return redirect('articles:list')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'accounts/login.html', { 'form': form })
 
 # @login_required()
 class HomePageView(generic.DetailView):
