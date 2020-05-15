@@ -5,11 +5,11 @@
   About: {{ user_profile.about }} <br>
 
   <div class="media">
-    <img src="{{ user_profile.user_image.url }}"> <br>
+    <img src="{{ user_profile.profile_image.url }}"> <br>
   </div><br><br>
   <hr>
 
-    My Plants: 
+  {{ user_profile.user }}'s Plants: 
   {% for plant in user_plants %}
     <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>
   {% endfor %}

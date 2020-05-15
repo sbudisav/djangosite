@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from PIL import Image
 
 class UserProfile(models.Model):
@@ -8,6 +10,7 @@ class UserProfile(models.Model):
   about = models.CharField(max_length=600, default='', blank=True)
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
+  # slug = models.SlugField(unique=True)
 
   following = models.ManyToManyField('self', through='FollowedUser', symmetrical=False, related_name='is_following')
   # Is this data redundant? Can we build the feed via the Followed User? 
@@ -28,15 +31,17 @@ class UserProfile(models.Model):
     return
 
   def user_feed(self):
-    for followed_user in self.following:
-      followed_posts = Post.objects.filter(author=followed_user)
+    for follow_object in self.following:
+      followed_posts = Post.objects.filter(author=follow_object.followed_user)
       for post in followed_posts:
         post_feed.append(post)
+    return post_feed
 
   def __str__(self):
     return f'{self.user.username} Profile'
 
   def save(self):
+    self.slug = slugify(self.user.username)
     super().save()
     if self.profile_image:
       img = Image.open(self.user_image.path)
