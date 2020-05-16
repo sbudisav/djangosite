@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from posts.models import Post, Comment
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from PIL import Image
@@ -26,11 +27,21 @@ class UserProfile(models.Model):
     return
 
   def user_feed(self):
-    for follow_object in self.following:
-      followed_posts = Post.objects.filter(author=follow_object.followed_user)
+    post_feed = []
+    follow_object = FollowedUser.objects.filter(user=self)
+    for fo in follow_object:
+      followed_posts = Post.objects.filter(author=fo.followed_user.user)
       for post in followed_posts:
-        post_feed.append(post)
+         post_feed.append(post)
     return post_feed
+
+
+  # def user_feed(self):
+  #   for follow_object in self.following.all():
+  #     followed_posts = Post.objects.filter(author=follow_object.followed_user)
+  #     for post in followed_posts:
+  #       post_feed.append(post)
+  #   return post_feed
 
   def __str__(self):
     return f'{self.user.username} Profile'

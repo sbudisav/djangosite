@@ -46,16 +46,18 @@
     <div class="row">
       <div class="col-md-2">
         <h4>Following:</h4>
-        
+        {% for fu in followed_user %}
+          {{ fu.followed_user }}
+        {% endfor %}
       </div>
 
       <div class="col-md-10">
         <h4>Your Post Feed</h4> <br>
         <!-- Pass a comment count for display View Comments (4) -->
-        {% for post in posts %}
-          <h4> {{ post.title }} </h4>
-          By: {{ post.author }}
-          {{ post.text }} <br>
+        {% for fpost in user_profile.user_feed %}
+          <h6> {{ fpost.title }} </h6>
+          By: {{ fpost.author }}
+          {{ fpost.text }} <br>
         {% endfor %}
 
         <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">View Comments

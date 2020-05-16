@@ -38,14 +38,13 @@ class HomePageView(generic.DetailView):
   context_object_name = 'user_profile'
 
   def get_context_data(self, *args, **kwargs):
-    # context = super(HomePageView, self).get_context_data(*args, **kwargs)
     context = super().get_context_data(**kwargs)
-
     user = get_object_or_404(User, id=self.request.user.id)
     context['user'] = user
     context['posts'] = Post.objects.filter(author=user.id)
     context['user_plants'] = UserPlant.objects.filter(user=user)
-    context['feed'] = self.user_feed(self)
+    # context['feed'] = .user_feed(self)
+    context['followed_user'] = FollowedUser.objects.filter(user=user.id)
     return context
 
 
