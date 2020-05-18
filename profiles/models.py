@@ -33,16 +33,11 @@ class UserProfile(models.Model):
       followed_posts = Post.objects.filter(author=fo.followed_user.user)
       for post in followed_posts:
          post_feed.append(post)
-         post_feed.objects.order_by('created_dt')
+         # post_feed.objects.order_by('created_dt')
     return post_feed
 
-
-  # def user_feed(self):
-  #   for follow_object in self.following.all():
-  #     followed_posts = Post.objects.filter(author=follow_object.followed_user)
-  #     for post in followed_posts:
-  #       post_feed.append(post)
-  #   return post_feed
+  def get_absoloute_url(self):
+    return reverse('profile_detail', kwargs={'pk': self.pk})
 
   def __str__(self):
     return f'{self.user.username} Profile'

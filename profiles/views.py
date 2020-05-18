@@ -43,9 +43,14 @@ class HomePageView(generic.DetailView):
     context['user'] = user
     context['posts'] = Post.objects.filter(author=user.id)
     context['user_plants'] = UserPlant.objects.filter(user=user)
-    # context['feed'] = .user_feed(self)
     context['followed_user'] = FollowedUser.objects.filter(user=user.id)
     return context
+
+class ProfileUpdateView(generic.edit.UpdateView):
+  model = UserProfile
+  fields = ['profile_image', 'about', 'requires_comment_validation', 'zipcode']
+  # This doest work yet below
+  success_url = self.redirect_to_homepage
 
 
 def profile(request, **kwargs):
