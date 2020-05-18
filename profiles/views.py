@@ -10,7 +10,7 @@ from django.views import generic
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm
 from .models import UserProfile, UserPlant, FollowedUser
 from posts.models import Post, Comment
 
@@ -50,7 +50,7 @@ class ProfileUpdateView(generic.edit.UpdateView):
   model = UserProfile
   fields = ['profile_image', 'about', 'requires_comment_validation', 'zipcode']
   # This doest work yet below
-  success_url = self.redirect_to_homepage
+  success_url = 'profile:redirect_home'
 
 
 def profile(request, **kwargs):
