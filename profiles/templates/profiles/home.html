@@ -5,7 +5,8 @@
     <h1>Profile Home</h1>
 
     {% if user.is_authenticated %}
-      You are logged in as {{ user }}
+      You are logged in as {{ user }} <br>
+      <a href="{% url 'profiles:profile_update' pk=user.id %}">Edit Profile</a>
     {% endif %}
     <hr> 
   </div>

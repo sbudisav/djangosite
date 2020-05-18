@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from profiles.models import UserPlant
 
 # Create your models here.
 
@@ -21,5 +22,11 @@ class Plant(models.Model):
   def __str__(self):
     return self.name
 
+  def add_plant(self, selected_plant):
+    UserPlant.objects.get_or_create(
+      user=self,
+      plant=selected_plant)
+
   # def get_absolute_url(self):
   #   return reverse("products:plant-detail", kwargs={"id": self.id})
+

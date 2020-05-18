@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
@@ -50,7 +50,7 @@ class ProfileUpdateView(generic.edit.UpdateView):
   model = UserProfile
   fields = ['profile_image', 'about', 'requires_comment_validation', 'zipcode']
   # This doest work yet below
-  success_url = 'profile:redirect_home'
+  success_url = reverse_lazy('profiles:redirect_home')
 
 
 def profile(request, **kwargs):

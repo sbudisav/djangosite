@@ -7,7 +7,8 @@
   {% endif %}
   <br> 
   {% for plant in plants %}
-  - {{ plant.name }} <br>
+  <h4> {{ plant.name }} </h4> - {{ plant.bionominal }}
+  <button>Add Plant To Collection</button> <br>
   {% endfor %}
 
 <a href="{% url 'polls:index' %}">Polls</a><br>
