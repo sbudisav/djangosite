@@ -31,12 +31,15 @@ def redirect_to_homepage(request):
   return HttpResponseRedirect(reverse('profiles:home', args=(user.id,)))
 
 class HomePageView(generic.DetailView):
-  # @method_decorator(login_required)
 
   model = UserProfile
   template_name='profiles/home.html'
   context_object_name = 'user_profile'
 
+  @method_decorator(login_required)
+  def dispatch(self, *args, **kwargs):
+    return super().dispatch(*args, **kwargs)
+        
   def get_context_data(self, *args, **kwargs):
     context = super().get_context_data(**kwargs)
     user = get_object_or_404(User, id=self.request.user.id)
@@ -49,9 +52,13 @@ class HomePageView(generic.DetailView):
 class ProfileUpdateView(generic.edit.UpdateView):
   model = UserProfile
   fields = ['profile_image', 'about', 'requires_comment_validation', 'zipcode']
-  # This doest work yet below
   success_url = reverse_lazy('profiles:redirect_home')
 
+class UserPlantUpdateView(generic.edit.UpdateView):
+  model = UserPlant
+  fields = ['nickname', 'userplant_image']
+  # Still needs sunlight that it's getting, need to migrate
+  success_url = reverse_lazy('profiles:redirect_home')
 
 def profile(request, **kwargs):
   user = get_object_or_404(User, username=kwargs.get('username'))

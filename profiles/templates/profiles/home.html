@@ -38,6 +38,7 @@
         <h4> My Plants: </h4><br>
         {% for plant in user_plants %}
           <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>
+          <a href="{% url 'profiles:userplant_update' pk=plant.id %}">Edit Plant</a>
         {% endfor %}
       </div>
     </div>

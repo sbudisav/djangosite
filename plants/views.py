@@ -11,3 +11,8 @@ class IndexView(generic.ListView):
   model = Plant
   template_name = 'plants/index.html'
   context_object_name = 'plants'
+
+  def add_userplant(self, plant):
+    Plant.add_plant(self.request.user, plant)
+    # Still need to go to the model with an id. 
+    return reverse_lazy('profiles:userplant_update')

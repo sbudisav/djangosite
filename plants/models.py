@@ -23,9 +23,10 @@ class Plant(models.Model):
     return self.name
 
   def add_plant(self, selected_plant):
-    UserPlant.objects.get_or_create(
+    new_plant = UserPlant.objects.get_or_create(
       user=self,
       plant=selected_plant)
+    return new_plant.id
 
   # def get_absolute_url(self):
   #   return reverse("products:plant-detail", kwargs={"id": self.id})
