@@ -21,7 +21,7 @@ def register(request):
           form.save()
           username = form.cleaned_data.get('username')
           messages.success(request, f'Your account has been created! You are now able to log in')
-          return redirect('login')
+          return redirect('profiles:login')
   else:
       form = UserRegisterForm()
   return render(request, 'profiles/register.html', {'form': form})
@@ -39,7 +39,7 @@ class HomePageView(generic.DetailView):
   @method_decorator(login_required)
   def dispatch(self, *args, **kwargs):
     return super().dispatch(*args, **kwargs)
-        
+
   def get_context_data(self, *args, **kwargs):
     context = super().get_context_data(**kwargs)
     user = get_object_or_404(User, id=self.request.user.id)
@@ -60,6 +60,16 @@ class UserPlantUpdateView(generic.edit.UpdateView):
   # Still needs sunlight that it's getting, need to migrate
   success_url = reverse_lazy('profiles:redirect_home')
 
+class UserAddPost(generic.edit.CreateView):
+  model = Post
+  fields = ['title', 'text', 'post_image']
+
+  def form_valid(self, form):
+    form.instance.author = self.request.user
+    return super().form_valid(form)
+
+  success_url = reverse_lazy('profiles:redirect_home')
+
 def profile(request, **kwargs):
   user = get_object_or_404(User, username=kwargs.get('username'))
   context = {
@@ -68,3 +78,19 @@ def profile(request, **kwargs):
     'posts':Post.objects.filter(author=user)
     }
   return render(request, 'profiles/user.html', context)
+
+class Profile(generic.detailView):
+  
+
+class UserIndex(generic.ListView):
+  model = User
+  template_name = 'user/user_index.html'
+
+  def get_context_data(self, *args, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user = get_object_or_404(User, id=self.request.user.id)
+
+    context['user'] = user
+    context['userlist'] = UserProfile.objects
+    context['followed_user'] = FollowedUser.objects.filter(user=user.id)
+    return context

@@ -32,6 +32,7 @@
           <h4> {{ post.title }} </h4>
           {{ post.text }} <br>
         {% endfor %}
+        <a href="{% url 'profiles:new_post' %}"> New Post </a>
       </div>
     <!-- Users Plants -->
       <div class="col-md-6">

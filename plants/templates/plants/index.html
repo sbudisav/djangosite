@@ -7,11 +7,12 @@
   {% endif %}
   <br> 
   {% for plant in plants %}
-  <h4> {{ plant.name }} </h4> - {{ plant.bionominal }}
+    <h4> {{ plant.name }} </h4> - {{ plant.bionominal }}
 
-   <button type="submit" value={{}} onclick="location.href='{% url 'downloadexcel' %}'" name='mybtn2'>Add Plant To Collection</button><br>
+
+
   {% endfor %}
 
-<a href="{% url 'polls:index' %}">Polls</a><br>
+<br><a href="{% url 'polls:index' %}">Polls</a><br>
 
 {% endblock %}

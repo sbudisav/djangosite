@@ -18,6 +18,7 @@ class Plant(models.Model):
   sun_pref = models.CharField(max_length=10, choices=sun_pref_choices)
   water_freq = models.IntegerField()
   fertilizer_freq = models.IntegerField()
+  # slug = models.SlugField(max_length=200, default=bionominal)
 
   def __str__(self):
     return self.name

@@ -11,6 +11,7 @@ class UserProfile(models.Model):
   about = models.CharField(max_length=600, default='', blank=True)
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
+  # slug = models.SlugField(max_length=200, default=self.user.username)
 
   following = models.ManyToManyField('self', through='FollowedUser', symmetrical=False, related_name='is_following')
 
@@ -42,7 +43,7 @@ class UserProfile(models.Model):
   def __str__(self):
     return f'{self.user.username} Profile'
 
-  def save(self):
+  def save(self, *args, **kwargs):
     super().save()
     if self.profile_image:
       img = Image.open(self.profile_image.path)
@@ -50,6 +51,11 @@ class UserProfile(models.Model):
           output_size = (300, 300)
           img.thumbnail(output_size)
           img.save(self.profile_image.path)
+
+  @receiver(post_save, sender=User)
+  def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
 
 class FollowedUser(models.Model):
   user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
