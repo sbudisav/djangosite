@@ -70,17 +70,17 @@ class UserAddPost(generic.edit.CreateView):
 
   success_url = reverse_lazy('profiles:redirect_home')
 
-def profile(request, **kwargs):
-  user = get_object_or_404(User, username=kwargs.get('username'))
-  context = {
-    'user_profile':UserProfile.objects.get(user=user),
-    'user_plants':UserPlant.objects.filter(user=user),
-    'posts':Post.objects.filter(author=user)
-    }
-  return render(request, 'profiles/user.html', context)
+class ProfileView(generic.DetailView):
+  model = UserProfile
+  context_object_name = 'user_profile'
+  template_name = "profiles/user.html"
 
-class Profile(generic.detailView):
-  
+  def get_context_data(self, *args, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user = get_object_or_404(User, id=self.kwargs['pk'])
+    context['user_plants'] = UserPlant.objects.filter(user=user)
+    context['posts'] = Post.objects.filter(author=user)
+    return context
 
 class UserIndex(generic.ListView):
   model = User

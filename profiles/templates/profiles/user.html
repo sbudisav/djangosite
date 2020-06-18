@@ -16,7 +16,7 @@
   <br> 
 
   <hr>
-   My Posts: <br>
+   {{ user_profile.user }}'s Posts: <br>
   {% for post in posts %}
     <h4> {{ post.title }} </h4>
     {{ post.text }} <br>

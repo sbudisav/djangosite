@@ -6,7 +6,7 @@ from . import views
 app_name = 'profiles'
 urlpatterns = [
     path('home/<int:pk>', views.HomePageView.as_view(), name='home'),
-    path('user/<str:username>', views.profile, name='profile'),
+    path('user/<int:pk>', views.ProfileView.as_view(), name='profile'),
     path('home/update/<int:pk>', views.ProfileUpdateView.as_view(template_name='profiles/profile_update.html'), name='profile_update'),
     path('home/update_plant/<int:pk>', views.UserPlantUpdateView.as_view(template_name='profiles/userplant_update.html'), name='userplant_update'),
     path('home/new_post', views.UserAddPost.as_view(template_name='profiles/new_post.html'), name='new_post'),
