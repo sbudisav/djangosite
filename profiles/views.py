@@ -14,24 +14,35 @@ from .forms import UserRegisterForm, UserUpdateForm
 from .models import UserProfile, UserPlant, FollowedUser
 from posts.models import Post, Comment
 
-def register(request):
-  if request.method == 'POST':
-      form = UserRegisterForm(request.POST)
-      if form.is_valid():
-          form.save()
-          username = form.cleaned_data.get('username')
-          messages.success(request, f'Your account has been created! You are now able to log in')
-          return redirect('profiles:login')
-  else:
-      form = UserRegisterForm()
-  return render(request, 'profiles/register.html', {'form': form})
+class UserIndex(generic.ListView):
+  model = UserProfile
+  template_name = 'profiles/user_index.html'
+  context_object_name = 'users'
 
-def redirect_to_homepage(request):
-  user = request.user
-  return HttpResponseRedirect(reverse('profiles:home', args=(user.id,)))
+  def get_queryset(self):
+    if (self.request.user):
+      queryset = User.objects.exclude(id=self.request.user.id)
+    return queryset
+
+  def get_context_data(self, *args, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user = self.request.user
+    context['user'] = user
+    return context
+
+class ProfileView(generic.DetailView):
+  model = UserProfile
+  context_object_name = 'user_profile'
+  template_name = "profiles/user.html"
+
+  def get_context_data(self, *args, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user = get_object_or_404(User, id=self.kwargs['pk'])
+    context['user_plants'] = UserPlant.objects.filter(user=user)
+    context['posts'] = Post.objects.filter(author=user)
+    return context
 
 class HomePageView(generic.DetailView):
-
   model = UserProfile
   template_name='profiles/home.html'
   context_object_name = 'user_profile'
@@ -42,11 +53,10 @@ class HomePageView(generic.DetailView):
 
   def get_context_data(self, *args, **kwargs):
     context = super().get_context_data(**kwargs)
-    user = get_object_or_404(User, id=self.request.user.id)
+    user = self.request.user
     context['user'] = user
     context['posts'] = Post.objects.filter(author=user.id)
     context['user_plants'] = UserPlant.objects.filter(user=user)
-    context['followed_user'] = FollowedUser.objects.filter(user=user.id)
     return context
 
 class ProfileUpdateView(generic.edit.UpdateView):
@@ -70,27 +80,18 @@ class UserAddPost(generic.edit.CreateView):
 
   success_url = reverse_lazy('profiles:redirect_home')
 
-class ProfileView(generic.DetailView):
-  model = UserProfile
-  context_object_name = 'user_profile'
-  template_name = "profiles/user.html"
+def register(request):
+  if request.method == 'POST':
+      form = UserRegisterForm(request.POST)
+      if form.is_valid():
+          form.save()
+          username = form.cleaned_data.get('username')
+          messages.success(request, f'Your account has been created! You are now able to log in')
+          return redirect('profiles:login')
+  else:
+      form = UserRegisterForm()
+  return render(request, 'profiles/register.html', {'form': form})
 
-  def get_context_data(self, *args, **kwargs):
-    context = super().get_context_data(**kwargs)
-    user = get_object_or_404(User, id=self.kwargs['pk'])
-    context['user_plants'] = UserPlant.objects.filter(user=user)
-    context['posts'] = Post.objects.filter(author=user)
-    return context
-
-class UserIndex(generic.ListView):
-  model = User
-  template_name = 'user/user_index.html'
-
-  def get_context_data(self, *args, **kwargs):
-    context = super().get_context_data(**kwargs)
-    user = get_object_or_404(User, id=self.request.user.id)
-
-    context['user'] = user
-    context['userlist'] = UserProfile.objects
-    context['followed_user'] = FollowedUser.objects.filter(user=user.id)
-    return context
+def redirect_to_homepage(request):
+  user = request.user
+  return HttpResponseRedirect(reverse('profiles:home', args=(user.id,)))

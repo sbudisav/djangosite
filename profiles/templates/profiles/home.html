@@ -49,14 +49,13 @@
     <div class="row">
       <div class="col-md-2">
         <h4>Following:</h4>
-        {% for fu in followed_user %}
-          {{ fu.followed_user }}
+        {% for followed_user in user_profile.following.all %}
+           {{ followed_user }}
         {% endfor %}
       </div>
 
       <div class="col-md-10">
         <h4>Your Post Feed</h4> <br>
-        <!-- Pass a comment count for display View Comments (4) -->
         {% for fpost in user_profile.user_feed %}
           <h6> {{ fpost.title }} </h6>
           By: {{ fpost.author }}

@@ -27,6 +27,10 @@ class UserProfile(models.Model):
         followed_user=followed_user).delete()
     return
 
+  def followed_users(self):
+    followed_objects = FollowedUser.objects.filter(user=self)
+    return
+
   def user_feed(self):
     post_feed = []
     follow_object = FollowedUser.objects.filter(user=self)
