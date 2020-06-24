@@ -10,6 +10,7 @@ class Post(models.Model):
   author = models.ForeignKey(User, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
   text = models.TextField()
+  user_likes = models.ManyToManyField(User, related_name='posts_liked', blank=True)
   post_image = models.ImageField(upload_to='post_picture', blank=True)
   created_dt = models.DateTimeField(default=timezone.now)
   published_dt = models.DateTimeField(blank=True, null=True)
