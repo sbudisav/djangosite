@@ -10,14 +10,14 @@
   <hr>
 
   <h1> You follow </h1> <br>
-  {% for fuser in user.following.all %}
+  {% for fuser in following.all %}
     <h4> {{ fuser }} </h4> - {{ fuser.about }}
   {% endfor %}
 
   <hr>
 
   {% for other_users in users %}
-    <h4> {{ other_users.username }} - {{ other_users.user_profile.about }} </h4> <br>
+    <h4> {{ other_users.user.username }} - {{ other_users.about }} </h4> <br>
   {% endfor %}
 
 

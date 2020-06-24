@@ -17,17 +17,13 @@ from posts.models import Post, Comment
 class UserIndex(generic.ListView):
   model = UserProfile
   template_name = 'profiles/user_index.html'
-  context_object_name = 'users'
 
-  def get_queryset(self):
-    if (self.request.user):
-      queryset = User.objects.exclude(id=self.request.user.id)
-    return queryset
-
-  def get_context_data(self, *args, **kwargs):
+  def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
-    user = self.request.user
-    context['user'] = user
+    user_profile = get_object_or_404(UserProfile, user=self.request.user)
+    # context['users'] = UserProfile.objects.exclude(user=self.request.user, user__in=user_profile.following.all())
+    context['users'] = UserProfile.objects.exclude(user__in=user_profile.following.all()).exclude(user=self.request.user)
+    context['following'] = user_profile.following
     return context
 
 class ProfileView(generic.DetailView):
