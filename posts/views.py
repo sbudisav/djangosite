@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 from .models import Post
 
-class IndexView(generic.ListView):
+class UserPostUpdateView(generic.edit.UpdateView):
   model = Post
-  template_name = 'posts/index.html'
+  fields = ['title', 'text', 'post_image']
+  success_url = reverse_lazy('profiles:redirect_home')
