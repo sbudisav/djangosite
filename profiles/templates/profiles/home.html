@@ -1,19 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <div class="page-header">
-    <h1>Profile Home</h1>
+<div class="page-header">
+  <h1>Profile Home</h1>
 
-    {% if user.is_authenticated %}
-      You are logged in as {{ user }} <br>
-      <a href="{% url 'profiles:profile_update' pk=user.id %}">Edit Profile</a>
-    {% endif %}
-    <hr> 
-  </div>
+  {% if user.is_authenticated %}
+    You are logged in as {{ user }} <br>
+  {% endif %}
+  <hr> 
+</div>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-6">
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" id="plants-tab" data-toggle="tab" href="#plants" role="tab" aria-controls="plants" aria-selected="true">Plants</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="blog-tab" data-toggle="tab" href="#blog" role="tab" aria-controls="blog" aria-selected="false">My Blog</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="feed-tab" data-toggle="tab" href="#feed" role="tab" aria-controls="feed" aria-selected="false">Feed</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane fade show active" id="plants" role="tabpanel" aria-labelledby="plants-tab">
+  <!-- About User -->
+    <div class="row overflow-auto pre-scrollable" style="max-height:800px">
+      <div class="col-md-6"><br>
+        <a href="{% url 'profiles:profile_update' pk=user.id %}">Edit Profile</a>
         <h4> About: </h4> {{ user_profile.about }} 
       </div>
       <div class="col-md-6">
@@ -23,18 +38,8 @@
       </div>
     </div>
     <hr>
-
-    <!-- Users Posts -->
+  <!-- Users Plants -->
     <div class="row">
-      <div class="col-md-6">
-        <h4> My Posts: </h4><br>
-        {% for post in posts %}
-          <h4> {{ post.title }} </h4>
-          {{ post.text }} <br>
-        {% endfor %}
-        <a href="{% url 'profiles:new_post' %}"> New Post </a>
-      </div>
-    <!-- Users Plants -->
       <div class="col-md-6">
         <h4> My Plants: </h4><br>
         {% for plant in user_plants %}
@@ -43,10 +48,52 @@
         {% endfor %}
       </div>
     </div>
-    <hr>
+  </div>
+
+    <!-- Users Posts -->
+  <div class="tab-pane fade" id="blog" role="tabpanel" aria-labelledby="blog-tab">
+    <div class="row overflow-auto pre-scrollable" style="max-height:800px">
+      <div class="col-md-2">
+        I dont know i like the side bar
+      </div>
+      <div class="col-md-10">
+        <h4> My Posts: </h4> <a class="btn btn-primary btn-sm" href="{% url 'profiles:new_post' %}"> New Post </a> <br>
+        {% for post in posts %}
+          <div class="card card-body">
+            <div class="card">
+              {% if img %}
+                <div class="media">
+                  <img class="card-img-top" src="{{ post.post_image.url }}" alt="Card image cap">
+                </div>
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.text }}</p>
+                <div class="comment-section" style="border-style:solid; border-width: 1px;">
+                  <a class="btn btn-primary btn-sm">Comments</a>
+                  <div class="comments">
+                    {% for comment in post.comments.all %}
+                      <div class="comment">
+                        <div class="date">{{ comment.created_date }}</div>
+                        <strong>{{ comment.author }}</strong>
+                        <p>{{ comment.text|linebreaks }}</p><hr>
+                      </div>
+                    {% empty %}
+                      <p>No comments here yet :( </p>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
   <!-- Post Feed -->
-    <div class="row">
+  <div class="tab-pane fade" id="feed" role="tabpanel" aria-labelledby="feed-tab">
+    <div class="row overflow-auto pre-scrollable" style="max-height:800px">
       <div class="col-md-2">
         <h4>Following:</h4>
         {% for followed_user in user_profile.following.all %}
@@ -61,7 +108,9 @@
             <div class="card">
               <h5 class="card-title">{{ fpost.author }}</h5>
               {% if img %}
-                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="media">
+                  <img class="card-img-top" src="{{ fpost.post_image.url }}" alt="Card image cap">
+                </div>
               {% endif %}
               <div class="card-body">
                 <h5 class="card-title">{{ fpost.title }}</h5>
@@ -88,7 +137,7 @@
       </div>
     </div>
   </div>
-  <hr>
+
 
 <a href="{% url 'polls:index' %}">Polls</a><br>
 <a href="{% url 'plants:home' %}">Plants Home</a>
