@@ -3,17 +3,22 @@ from django.contrib.auth.models import User
 from posts.models import Post, Comment
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from PIL import Image
 
 class UserProfile(models.Model):
   user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, primary_key=True)
-  profile_image = models.ImageField(default='default_profile.jpg', upload_to='profile_pic', blank=True)
+  profile_image = models.ImageField(default='default_profile.jpg', upload_to='profile_images', blank=True)
   about = models.CharField(max_length=600, default='', blank=True)
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
   # slug = models.SlugField(max_length=200, default=self.user.username)
 
   following = models.ManyToManyField('self', through='FollowedUser', symmetrical=False, related_name='is_following')
+
+  def followers(self):
+    users_following = FollowedUser.objects.filter(followed_user=self)
+    return users_following
 
   def start_following(self, followed_user):
     FollowedUser.objects.get_or_create(
@@ -27,9 +32,6 @@ class UserProfile(models.Model):
         followed_user=followed_user).delete()
     return
 
-  def followed_users(self):
-    followed_objects = FollowedUser.objects.filter(user=self)
-    return
 
   def user_feed(self):
     post_feed = []
@@ -45,10 +47,10 @@ class UserProfile(models.Model):
     return reverse('profile_detail', kwargs={'pk': self.pk})
 
   def __str__(self):
-    return f'{self.user.username} Profile'
+    return f'{self.user.username}'
 
   def save(self, *args, **kwargs):
-    super().save()
+    super().save(*args, **kwargs)
     if self.profile_image:
       img = Image.open(self.profile_image.path)
       if img.height > 300 or img.width > 300:
@@ -73,13 +75,13 @@ class UserPlant(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   plant = models.ForeignKey('plants.Plant', on_delete=models.CASCADE)
   nickname = models.CharField(max_length=25, default='')
-  userplant_image = models.ImageField(upload_to='userplant_pic', blank=True)
+  userplant_image = models.ImageField(upload_to='userplant_images/', blank=True)
 
   def __str__(self):
     return f'{self.user.username}s {self.plant.name} - {self.nickname}'
 
-  def save(self):
-    super().save()
+  def save(self, *args, **kwargs):
+    super().save(*args, **kwargs)
     if self.userplant_image:
       img = Image.open(self.userplant_image.path)
       if img.height > 300 or img.width > 300:

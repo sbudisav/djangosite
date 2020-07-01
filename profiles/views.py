@@ -8,7 +8,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.utils.decorators import method_decorator
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.views.decorators.http import require_POST
 
 from .forms import UserRegisterForm, UserUpdateForm
 from .models import UserProfile, UserPlant, FollowedUser
@@ -91,3 +92,20 @@ def register(request):
 def redirect_to_homepage(request):
   user = request.user
   return HttpResponseRedirect(reverse('profiles:home', args=(user.id,)))
+
+@login_required
+@require_POST
+def image_like(request):
+  image_id = request.POST.get('id')
+  action = request.POST.get('action')
+  if image_id and action:
+    try:
+      image = Image.objects.get(id=image_id)
+      if action == 'like':
+        image.users_like.add(request.user)
+      else:
+        image.users_like.remove(request.user)
+        return JsonResponse({'status':'ok'})
+    except:
+      pass
+      return JsonResponse({'status':'ko'})

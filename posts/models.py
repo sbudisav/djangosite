@@ -11,7 +11,7 @@ class Post(models.Model):
   title = models.CharField(max_length=200)
   text = models.TextField()
   user_likes = models.ManyToManyField(User, related_name='posts_liked', blank=True)
-  post_image = models.ImageField(upload_to='post_picture', blank=True)
+  post_image = models.ImageField(upload_to='post_images', blank=True)
   created_dt = models.DateTimeField(default=timezone.now)
   published_dt = models.DateTimeField(blank=True, null=True)
 
@@ -19,8 +19,8 @@ class Post(models.Model):
     self.published_dt = timezone.now()
     self.save()
 
-  def save(self):
-    super().save()
+  def save(self, *args, **kwargs):
+    super().save(*args, **kwargs)
     if self.post_image:
       img = Image.open(self.post_image.path)
       if img.height > 300 or img.width > 300:
