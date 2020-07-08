@@ -13,7 +13,6 @@ class UserProfile(models.Model):
   zipcode = models.CharField(max_length=5, default='', blank=True)
   requires_comment_validation = models.BooleanField(default=False)
   # slug = models.SlugField(max_length=200, default=self.user.username)
-
   following = models.ManyToManyField('self', through='FollowedUser', symmetrical=False, related_name='is_following')
 
   def followers(self):
@@ -31,7 +30,6 @@ class UserProfile(models.Model):
         user=self,
         followed_user=followed_user).delete()
     return
-
 
   def user_feed(self):
     post_feed = []

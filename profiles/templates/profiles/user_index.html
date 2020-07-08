@@ -11,13 +11,36 @@
 
   <h1> You follow </h1> <br>
   {% for fuser in following.all %}
-    <h4> {{ fuser }} </h4> - {{ fuser.about }}
+    <div class="row">
+      <div class="col-md-1">
+        <button href="#" data-id="{{ user.id }}" data-action="unfollow" class="follow button">Unfollow</button>
+      </div>
+      <div class="col-md-2">
+        <div class="media">
+          <img src="{{ fuser.profile_image.url }}" style="width:120px;height:120px;"> <br>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <a href="{% url 'profiles:profile' pk=fuser.user.id %}"> <h4> {{ fuser }} </h4></a> - {{ fuser.about }}
+      </div>
+    </div><hr>
   {% endfor %}
 
-  <hr>
-
-  {% for other_users in users %}
-    <h4> {{ other_users.user.username }} - {{ other_users.about }} </h4> <br>
+  <h1> More Users </h1> <br>
+    {% for other_users in users %}
+    <div class="row">
+      <div class="col-md-1">
+        <button> Follow </button>
+      </div>
+      <div class="col-md-2">
+        <div class="media">
+          <img src="{{ other_users.profile_image.url }}" style="width:120px;height:120px;"> <br>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <a href="{% url 'profiles:profile' pk=other_users.user.id %}"> <h4> {{ other_users.user.username }}</h4></a> - {{ other_users.about }} 
+      </div>
+    </div><hr>
   {% endfor %}
 
 

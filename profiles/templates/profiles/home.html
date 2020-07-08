@@ -26,7 +26,7 @@
 <div class="tab-content">
   <div class="tab-pane fade show active" id="plants" role="tabpanel" aria-labelledby="plants-tab">
   <!-- About User -->
-    <div class="row overflow-auto pre-scrollable" style="max-height:800px">
+    <div class="row">
       <div class="col-md-6"><br>
         <a href="{% url 'profiles:profile_update' pk=user.id %}">Edit Profile</a>
         <h4> About: </h4> {{ user_profile.about }} 
@@ -62,8 +62,8 @@
       <div class="col-md-2">
 
         <h4>Followers:</h4>
-        {% for followed_user in user_profile.followers %}
-           {{ followed_user.user }}
+        {% for follower in user_profile.followers %}
+           <a href="{% url 'profiles:profile' pk=follower.user.user.id %}"> {{ follower.user }}</a>
         {% endfor %}
 
       </div>
@@ -82,6 +82,22 @@
               <div class="card-body">
                 <h5 class="card-title"><a class="btn btn-primary btn-sm" href="{% url 'posts:update_post' pk=post.id %}">Edit Post</a> {{ post.title }}</h5>
                 <p class="card-text">{{ post.text }}</p>
+
+                <div class="likes">
+                  {% with total_likes=post.user_likes.count user_likes=post.user_likes.all %}
+                    <a href="#" data-id="{{ post.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">
+                      {% if request.user not in user_likes %}
+                        Like
+                      {% else %}
+                        Unlike
+                      {% endif %}
+                    </a>
+                    <span class="total">{{ total_likes }}</span>
+                     like{{ total_likes|pluralize }}
+                    </span>
+                  {% endwith %} 
+                </div><br>
+
                 <a class="btn btn-primary btn-sm" href="">Comments</a>
                 <div class="comment-section" style="border-style:solid; border-width: 1px;">
                   <div class="comments">
@@ -128,6 +144,24 @@
               <div class="card-body">
                 <h5 class="card-title">{{ fpost.title }}</h5>
                 <p class="card-text">{{ fpost.text }}</p>
+
+                <!-- Likes -->
+                <div class="likes">
+                  {% with total_likes=fpost.user_likes.count user_likes=fpost.user_likes.all %}
+                    <a href="#" data-id="{{ fpost.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">
+                      {% if request.user not in user_likes %}
+                        Like
+                      {% else %}
+                        Unlike
+                      {% endif %}
+                    </a>
+                    <span class="total">{{ total_likes }}</span>
+                     like{{ total_likes|pluralize }}
+                    </span>
+                  {% endwith %} 
+                </div><br>
+
+                <!-- Comments -->
                 <a class="btn btn-primary btn-sm">Comments</a>
                 <div class="comment-section" style="border-style:solid; border-width: 1px;">
                   <div class="comments">
@@ -150,8 +184,32 @@
       </div>
     </div>
   </div>
+{% endblock %}
 
 
-<a href="{% url 'polls:index' %}">Polls</a><br>
-<a href="{% url 'plants:home' %}">Plants Home</a>
+{% block domready %}
+  $('a.like').click(function(e){
+    e.preventDefault();
+    $.post('{% url "posts:like" %}',
+      {
+        id: $(this).data('id'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $('a.like').data('action');
+
+          // toggle data-action
+          $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
+          // toggle link text
+          $('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
+
+          // update total likes
+          var previous_likes = parseInt($('span.count .total').text());
+          $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+        }
+      }
+    );
+  });
 {% endblock %}

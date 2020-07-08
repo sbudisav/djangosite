@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.utils.decorators import method_decorator
+
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.http import require_POST
 
@@ -22,7 +23,6 @@ class UserIndex(generic.ListView):
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     user_profile = get_object_or_404(UserProfile, user=self.request.user)
-    # context['users'] = UserProfile.objects.exclude(user=self.request.user, user__in=user_profile.following.all())
     context['users'] = UserProfile.objects.exclude(user__in=user_profile.following.all()).exclude(user=self.request.user)
     context['following'] = user_profile.following
     return context
@@ -95,13 +95,13 @@ def redirect_to_homepage(request):
 
 @login_required
 @require_POST
-def image_like(request):
-  image_id = request.POST.get('id')
+def follow_user_update(request):
+  user_id = request.POST.get('id')
   action = request.POST.get('action')
   if image_id and action:
     try:
       image = Image.objects.get(id=image_id)
-      if action == 'like':
+      if action == 'follow':
         image.users_like.add(request.user)
       else:
         image.users_like.remove(request.user)

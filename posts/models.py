@@ -11,6 +11,8 @@ class Post(models.Model):
   title = models.CharField(max_length=200)
   text = models.TextField()
   user_likes = models.ManyToManyField(User, related_name='posts_liked', blank=True)
+  total_likes = models.PositiveIntegerField(db_index=True,
+                                              default=0)
   post_image = models.ImageField(upload_to='post_images', blank=True)
   created_dt = models.DateTimeField(default=timezone.now)
   published_dt = models.DateTimeField(blank=True, null=True)
