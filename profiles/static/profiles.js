@@ -23,7 +23,3 @@ $('a.like').click(function(e){
     }
   );
 });
-
-Document.addEventListener("DOMContentLoaded", function() {
-  console.log("dom content loaded");
-});

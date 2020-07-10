@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+  <div id="user_feed">
+    <div class="row">
+      <div class="col-md-2">
+        <h4>Following:</h4>
+        {% for followed_user in user_profile.following.all %}
+           <a href="{% url 'profiles:profile' pk=followed_user.user.id %}"> {{ followed_user }}</a>
+        {% endfor %}
+      </div>
+
+      <div class="col-md-10">
+        <h4>Your Post Feed</h4> <br>
+        {% for fpost in user_profile.user_feed %}
+          <div class="card card-body" style="border:solid">
+            <div class="card" style="border:none">
+              <h5 class="card-title">{{ fpost.author }}</h5>
+              {% if img %}
+                <div class="media">
+                  <img class="card-img-top" src="{{ fpost.post_image.url }}" alt="Card image cap">
+                </div>
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ fpost.title }}</h5>
+                <p class="card-text">{{ fpost.text }}</p>
+
+                <!-- Likes -->
+                <div class="likes">
+                  {% with total_likes=fpost.user_likes.count user_likes=fpost.user_likes.all %}
+                    <a href="#" data-id="{{ fpost.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">
+                      {% if request.user not in user_likes %}
+                        Like
+                      {% else %}
+                        Unlike
+                      {% endif %}
+                    </a>
+                    <span class="total">{{ total_likes }}</span>
+                     like{{ total_likes|pluralize }}
+                    </span>
+                  {% endwith %} 
+                </div><br>
+
+                <!-- Comments -->
+                <a class="btn btn-primary btn-sm">Comments</a>
+                <div class="comment-section" style="border-style:solid; border-width: 1px;">
+                  <div class="comments">
+                    {% for comment in fpost.comments.all %}
+                      <div class="comment">
+                        <div class="date">{{ comment.created_date }}</div>
+                        <strong>{{ comment.author }}</strong>
+                        <p>{{ comment.text|linebreaks }}</p><hr>
+                      </div>
+                    {% empty %}
+                      <p>No comments here yet :( </p>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><br>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

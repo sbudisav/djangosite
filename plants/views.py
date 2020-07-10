@@ -5,6 +5,7 @@ from django.views import generic
 from django.contrib.auth.models import User
 
 from .models import Plant
+from profiles.models import UserPlant
 
 
 class IndexView(generic.ListView):
@@ -16,3 +17,15 @@ class IndexView(generic.ListView):
     Plant.add_plant(self.request.user, plant)
     # Still need to go to the model with an id. 
     return reverse_lazy('profiles:userplant_update')
+
+class DetailView(generic.DetailView):
+  model = Plant
+  template_name='plants/detail.html'
+  context_object_name = 'plant'
+
+  def get_context_data(self, *args, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user = self.request.user
+    context['user'] = user
+    context['user_plants'] = UserPlant.objects.filter(user=user).filter(plant=self.kwargs['pk'])
+    return context

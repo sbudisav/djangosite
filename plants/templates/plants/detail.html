@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h1> Plant Details </h1> <br>
+    <h4> {{ plant.name }} </h4> - {{ plant.bionominal }}
+    <hr>
+
+
+  {% if user.is_authenticated %}
+    You are logged in as {{ user }}
+  {% endif %}
+  <h4> You have {{user_plants.count}} {{ plant.name}}s : </h4><br>
+        {% for plant in user_plants %}
+            {% if plant.userplant_image %}
+              <div class="media">
+                <img src="{{ plant.userplant_image.url }}">
+              </div>
+            {% endif %}
+          <h4> {{ plant.nickname }} the {{ plant.plant.name }} </h4>
+          <a href="{% url 'profiles:userplant_update' pk=plant.id %}">Edit Plant</a>
+        {% endfor %}
+  <br> 
+
+
+{% endblock %}
