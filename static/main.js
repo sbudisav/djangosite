@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
             $(like).text(previous_action == 'like' ? 'Unlike' : 'Like');
 
             // update total likes
-            var previous_likes = parseInt($('span.count .total').text());
-            $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+            var previous_likes = parseInt($('span.total[data-id=' + like.dataset.id +']').text());
+            $('span.total[data-id=' + like.dataset.id +']').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
           }
         }
       );

@@ -94,7 +94,7 @@
                         Unlike
                       {% endif %}
                     </a>
-                    <span class="total">{{ total_likes }}</span>
+                    <span class="total" data-id="{{ post.id }}">{{ total_likes }}</span>
                      like{{ total_likes|pluralize }}
                     </span>
                   {% endwith %} 
