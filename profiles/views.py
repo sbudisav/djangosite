@@ -109,3 +109,21 @@ def follow_user_update(request):
     except:
       pass
       return JsonResponse({'status':'ko'})
+
+@login_required
+@require_POST
+def post_like(request):
+  post_id = request.POST.get('id')
+  action = request.POST.get('action')
+  if post_id and action:
+    try:
+      post = Post.objects.get(id=post_id)
+      if action == 'like':
+        post.user_likes.add(request.user)
+        return JsonResponse({'status':'ok'})
+      else:
+        post.user_likes.remove(request.user)
+        return JsonResponse({'status':'ok'})
+    except:
+      pass
+      return JsonResponse({'status':'ko'})
