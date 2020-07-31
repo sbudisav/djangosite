@@ -87,7 +87,7 @@
 
                 <div class="likes">
                   {% with total_likes=post.user_likes.count user_likes=post.user_likes.all %}
-                    <a href="#" data-url='{% url "profiles:like" %}' data-id="{{ post.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">
+                    <a href="#mydiv" data-url='{% url "profiles:like" %}' data-id="{{ post.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">
                       {% if request.user not in user_likes %}
                         Like
                       {% else %}

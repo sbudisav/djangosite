@@ -13,7 +13,13 @@
   {% for fuser in following.all %}
     <div class="row">
       <div class="col-md-1">
-        <button href="#" data-id="{{ user.id }}" data-action="unfollow" class="follow button">Unfollow</button>
+        <a type="button" class="follow button btn btn-info" href="#unfollow" data-url='{% url "profiles:follow" %}' data-id="{{ fuser.user.id }}" data-action="unfollow">
+          {% if request.user not in user_likes %}
+            Follow
+          {% else %}
+            Unfollow
+          {% endif %}
+        </a>
       </div>
       <div class="col-md-2">
         <div class="media">
@@ -30,7 +36,8 @@
     {% for other_users in users %}
     <div class="row">
       <div class="col-md-1">
-        <button> Follow </button>
+        <a href="#follow" data-url='{% url "profiles:follow" %}' data-id="{{ other_users.user.id }}" data-action="follow" class="follow button btn btn-info"> Follow
+        </a>
       </div>
       <div class="col-md-2">
         <div class="media">

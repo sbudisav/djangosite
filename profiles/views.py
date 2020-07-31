@@ -93,18 +93,23 @@ def redirect_to_homepage(request):
   user = request.user
   return HttpResponseRedirect(reverse('profiles:home', args=(user.id,)))
 
+#  Use start following!!!
+
+
 @login_required
 @require_POST
 def follow_user_update(request):
   user_id = request.POST.get('id')
   action = request.POST.get('action')
-  if image_id and action:
+  if user_id and action:
     try:
-      image = Image.objects.get(id=image_id)
+      user = User.objects.get(id=user_id)
       if action == 'follow':
-        image.users_like.add(request.user)
-      else:
-        image.users_like.remove(request.user)
+        FollowedUser.objects.get_or_create(user = request.user.userprofile, followed_user = user.userprofile)
+        return JsonResponse({'status':'ok'})
+      elif action == 'unfollow':
+        followed_user = FollowedUser.objects.get(user=request.user.userprofile, followed_user=user.userprofile)
+        followed_user.delete()
         return JsonResponse({'status':'ok'})
     except:
       pass

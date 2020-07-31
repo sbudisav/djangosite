@@ -19,15 +19,19 @@ class UserProfile(models.Model):
     users_following = FollowedUser.objects.filter(followed_user=self)
     return users_following
 
-  def start_following(self, followed_user):
+    # While I don't use these for following I'm keeping them incase I ever feel like trimming down the view
+
+  def start_following(current_user, followed_user):
+    print(f"initiated start following with current user {self} and followed user {followed_user}")
     FollowedUser.objects.get_or_create(
-        user=self,
+        user=current_user,
         followed_user=followed_user)
     return
 
-  def stop_following(self, followed_user):
-    FollowedUser.objects.filter(
-        user=self,
+  def stop_following(current_user, followed_user):
+    print(f"initiated stop following with current user {self} and followed user {followed_user}")
+    FollowedUser.objects.get(
+        user=current_user,
         followed_user=followed_user).delete()
     return
 
@@ -60,6 +64,11 @@ class UserProfile(models.Model):
   def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+
+  # Note sure if I need this receiver
+  # @receiver(post_save, sender=User)
+  # def save_user_profile(sender, instance, **kwargs):
+  #   instance.profile.save()
 
 class FollowedUser(models.Model):
   user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
