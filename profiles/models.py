@@ -65,7 +65,7 @@ class UserProfile(models.Model):
     if created:
         UserProfile.objects.create(user=instance)
 
-  # Note sure if I need this receiver
+  # Note sure if I need this receiver or if it should be in the save function above. 
   # @receiver(post_save, sender=User)
   # def save_user_profile(sender, instance, **kwargs):
   #   instance.profile.save()
