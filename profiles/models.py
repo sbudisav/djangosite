@@ -22,7 +22,7 @@ class UserProfile(models.Model):
     # While I don't use these for following I'm keeping them incase I ever feel like trimming down the view
 
   def start_following(current_user, followed_user):
-    print(f"initiated start following with current user {self} and followed user {followed_user}")
+    # print(f"initiated start following with current user {self} and followed user {followed_user}")
     FollowedUser.objects.get_or_create(
         user=current_user,
         followed_user=followed_user)
