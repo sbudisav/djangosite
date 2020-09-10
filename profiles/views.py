@@ -30,7 +30,7 @@ class UserIndex(generic.ListView):
 class ProfileView(generic.DetailView):
   model = UserProfile
   context_object_name = 'user_profile'
-  template_name = "profiles/user.html"
+  template_name = "profiles/user.html" 
 
   def get_context_data(self, *args, **kwargs):
     context = super().get_context_data(**kwargs)
